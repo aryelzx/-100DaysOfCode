@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
   const splitEndpoint = pathname.split('/').filter(Boolean)
   
   if(splitEndpoint.length > 1) {
-    pathname = `/${splitEndpoint[0]}/:id`
+    pathname = `/${splitEndpoint[0]}/:id`;
     id = splitEndpoint[1];
   }
 
@@ -29,6 +29,10 @@ const server = http.createServer((req, res) => {
     req.query = Object.fromEntries(parsedUrl.searchParams);
     req.params = { id };
     
+    res.send = (statusCode, body) => {
+      res.writeHead(statusCode, { 'Content-type': 'text/html' });
+      res.end(JSON.stringify(body));
+    }
     
     route.handler(req, res);
   } else {
