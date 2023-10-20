@@ -12,5 +12,20 @@ module.exports = {
     })
     res.writeHead(200, { "Content-type": "application/json" });
     res.end(JSON.stringify(sortedUsers));
+  },
+
+  getUserById(req, res) {
+    const { id } = req.params;
+
+    const user = users.find((user) => user.id === Number(id))
+
+    if (!user) {
+      res.writeHead(404, {"Content-type": "application/json" });
+      res.end(JSON.stringify({ error: "User not found!"}))
+      return;
+    }
+
+    res.writeHead(200, {"Content-type": "application/json" });
+    res.end(JSON.stringify(user))
   }
 };
