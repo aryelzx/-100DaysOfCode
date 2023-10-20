@@ -1,6 +1,7 @@
 const http = require('http');
 const { URL } = require('url');
 
+const bodyParser = require('../helpers/bodyParser')
 const routes = require('./routes')
 
 const port = 3000;
@@ -34,7 +35,12 @@ const server = http.createServer((req, res) => {
       res.end(JSON.stringify(body));
     }
     
-    route.handler(req, res);
+    if (['POST', 'PUT', 'PATCH'].includes(req.method)){
+      bodyParser(req, () => route.handler(req, res));
+    } else {
+      route.handler(req, res);
+    }
+
   } else {
     res.writeHead(404, { 'Content-type': 'text/html' });
     res.end(`Cannot ${req.method} ${parsedUrl.pathname }`)
